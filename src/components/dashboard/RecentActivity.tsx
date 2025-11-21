@@ -35,9 +35,13 @@ const RecentActivity: React.FC<RecentActivityProps> = ({ tours }) => {
                                 />
                             }
                             title={
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <Text strong style={{ fontSize: 15 }}>{item.title}</Text>
-                                    <Text strong style={{ color: '#1890ff' }}>${item.price.toLocaleString()}</Text>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                                    <Text strong style={{ fontSize: 15, flex: 1, marginRight: 8 }} ellipsis={{ tooltip: item.title }}>
+                                        {item.title}
+                                    </Text>
+                                    <Text strong style={{ color: '#1890ff', whiteSpace: 'nowrap' }}>
+                                        {item.price?.toLocaleString('vi-VN')} ₫
+                                    </Text>
                                 </div>
                             }
                             description={

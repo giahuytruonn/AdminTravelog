@@ -124,7 +124,7 @@ const ToursPage: React.FC = () => {
             title: 'Price',
             dataIndex: 'price',
             key: 'price',
-            render: (val) => `$${val.toLocaleString()}`,
+            render: (val) => val.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }),
             width: 120,
         },
         {

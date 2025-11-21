@@ -103,7 +103,7 @@ const CouponsPage: React.FC = () => {
             key: 'discount',
             render: (_, record) => (
                 <span>
-                    {record.type === 'percentage' ? `${record.cost}%` : `$${record.cost}`}
+                    {record.type === 'percentage' ? `${record.cost}%` : record.cost.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
                 </span>
             )
         },
@@ -111,7 +111,7 @@ const CouponsPage: React.FC = () => {
             title: 'Min Order',
             dataIndex: 'minimumOrderValue',
             key: 'minimumOrderValue',
-            render: (val) => val ? `$${val.toLocaleString()}` : '-',
+            render: (val) => val ? val.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) : '-',
         },
         {
             title: 'Valid Until',

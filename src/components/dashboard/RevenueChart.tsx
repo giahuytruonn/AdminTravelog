@@ -75,7 +75,7 @@ const RevenueChart: React.FC = () => {
                             axisLine={false}
                             tickLine={false}
                             tick={{ fill: '#8c8c8c', fontSize: 12 }}
-                            tickFormatter={(value) => `$${value}`}
+                            tickFormatter={(value) => `${value.toLocaleString('vi-VN')} ₫`}
                         />
                         <Tooltip
                             contentStyle={{
@@ -83,7 +83,7 @@ const RevenueChart: React.FC = () => {
                                 border: 'none',
                                 boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
                             }}
-                            formatter={(value: number) => [`$${value}`, 'Revenue']}
+                            formatter={(value: number) => [`${value.toLocaleString('vi-VN')} ₫`, 'Revenue']}
                         />
                         <Area
                             type="monotone"

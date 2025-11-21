@@ -102,8 +102,8 @@ const CouponFormModal: React.FC<CouponFormModalProps> = ({
                         style={{ flex: 1 }}
                     >
                         <InputNumber
-                            formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                            parser={value => value!.replace(/\$\s?|(,*)/g, '')}
+                            formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' ₫'}
+                            parser={value => value!.replace(/\s?₫|(\.*)/g, '')}
                             style={{ width: '100%' }}
                         />
                     </Form.Item>
@@ -113,8 +113,8 @@ const CouponFormModal: React.FC<CouponFormModalProps> = ({
                         style={{ flex: 1 }}
                     >
                         <InputNumber
-                            formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                            parser={value => value!.replace(/\$\s?|(,*)/g, '')}
+                            formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' ₫'}
+                            parser={value => value!.replace(/\s?₫|(\.*)/g, '')}
                             style={{ width: '100%' }}
                             placeholder="Unlimited"
                         />
