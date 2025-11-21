@@ -4,7 +4,8 @@ import {
     DashboardOutlined,
     GlobalOutlined,
     TagsOutlined,
-    EnvironmentOutlined
+    EnvironmentOutlined,
+    VideoCameraOutlined
 } from '@ant-design/icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -39,6 +40,11 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, onCollapse }) => {
             key: '/destinations',
             icon: <EnvironmentOutlined />,
             label: 'Destinations',
+        },
+        {
+            key: '/explores',
+            icon: <VideoCameraOutlined />,
+            label: 'Explores',
         },
     ];
 

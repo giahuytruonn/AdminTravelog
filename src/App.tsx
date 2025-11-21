@@ -4,7 +4,7 @@ import Dashboard from './pages/Dashboard';
 import ToursPage from './pages/ToursPage';
 import CouponsPage from './pages/CouponsPage';
 import DestinationsPage from './pages/DestinationsPage';
-
+import ExploresPage from './pages/ExplorePage';
 function App() {
   return (
     <Routes>
@@ -13,6 +13,7 @@ function App() {
         <Route path="tours" element={<ToursPage />} />
         <Route path="coupons" element={<CouponsPage />} />
         <Route path="destinations" element={<DestinationsPage />} />
+        <Route path="explores" element={<ExploresPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>

@@ -42,3 +42,15 @@ export interface Destination extends BaseEntity {
     popular: boolean;
     tourCount: number;
 }
+
+export interface ExploreVideo {
+  id: string;
+  tourID: string | null; // Null nếu là video quảng bá chung
+  videoLink: string;
+  title: string;
+  description: string;
+  likes: number;
+  status: boolean;
+  createdAt: any;
+  updatedAt?: any;
+}
