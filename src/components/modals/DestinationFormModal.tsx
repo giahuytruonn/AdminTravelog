@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
-import { Modal, Form, Input, Checkbox } from 'antd';
+import { Modal, Form, Input, Checkbox, Upload, Button, Image } from 'antd';
+import { UploadOutlined, DeleteOutlined } from '@ant-design/icons';
 import type { Destination } from '../../types';
 
 interface DestinationFormModalProps {
@@ -33,6 +34,24 @@ const DestinationFormModal: React.FC<DestinationFormModalProps> = ({
         });
     };
 
+    /** 🔥 Upload ảnh Cloudinary */
+    const uploadToCloudinary = async (file: File) => {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", "Travelog"); // preset của bạn
+
+        const res = await fetch(
+            `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload`,
+            {
+                method: "POST",
+                body: formData
+            }
+        );
+
+        const data = await res.json();
+        return data.secure_url;
+    };
+
     return (
         <Modal
             title={initialValues ? "Edit Destination" : "Add Destination"}
@@ -44,7 +63,7 @@ const DestinationFormModal: React.FC<DestinationFormModalProps> = ({
             <Form
                 form={form}
                 layout="vertical"
-                initialValues={{ status: true, popular: false, tourCount: 0 }}
+                initialValues={{ status: true, popular: false }}
             >
                 <Form.Item
                     name="name"
@@ -70,12 +89,46 @@ const DestinationFormModal: React.FC<DestinationFormModalProps> = ({
                     <Input.TextArea rows={4} />
                 </Form.Item>
 
+                {/* 🔥 Upload ảnh */}
                 <Form.Item
-                    name="imageUrl"
-                    label="Image URL"
-                    rules={[{ required: true, message: 'Please enter image URL' }]}
+                    label="Destination Image"
+                    required
                 >
-                    <Input placeholder="https://..." />
+                    {/* Nếu có ảnh thì hiển thị */}
+                    {form.getFieldValue("imageUrl") ? (
+                        <div style={{ marginBottom: 12 }}>
+                            <Image
+                                src={form.getFieldValue("imageUrl")}
+                                width={200}
+                                style={{ borderRadius: 8 }}
+                            />
+                            <Button
+                                danger
+                                icon={<DeleteOutlined />}
+                                style={{ marginTop: 8 }}
+                                onClick={() => form.setFieldsValue({ imageUrl: "" })}
+                            >
+                                Remove Image
+                            </Button>
+                        </div>
+                    ) : null}
+
+                    {/* Nút upload */}
+                    <Upload
+                        accept="image/*"
+                        showUploadList={false}
+                        customRequest={async ({ file, onSuccess }) => {
+                            const url = await uploadToCloudinary(file as File);
+                            if (url) {
+                                form.setFieldsValue({ imageUrl: url });
+                                onSuccess && onSuccess("ok");
+                            }
+                        }}
+                    >
+                        <Button icon={<UploadOutlined />}>
+                            Upload Image
+                        </Button>
+                    </Upload>
                 </Form.Item>
 
                 <Form.Item name="popular" valuePropName="checked">
