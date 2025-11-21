@@ -23,22 +23,25 @@ export interface Tour extends BaseEntity {
 
 export interface Coupon extends BaseEntity {
     code: string;
-    discountType: 'percentage' | 'fixed';
-    discountValue: number;
-    minOrderValue: number;
-    maxDiscount?: number;
-    validFrom: Timestamp;
-    validUntil: Timestamp;
-    usageLimit: number;
-    usedCount: number;
+    type: 'percentage' | 'fixed';
+    cost: number; // discount value
+    minimumOrderValue: number;
+    maximumDiscount: number | null;
+    timeStart: Timestamp;
+    timeEnd: Timestamp;
+    usageLimit?: number;
+    usedCount?: number;
     description: string;
+    title: string;
+    applicableRanks: string[] | null;
+    applicableTours: string[] | null;
 }
 
 export interface Destination extends BaseEntity {
     name: string;
     country: string;
     description: string;
-    imageUrl: string;
-    popular: boolean;
-    tourCount: number;
+    coverImage: string;
+    popular?: boolean;
+    tourCount?: number;
 }

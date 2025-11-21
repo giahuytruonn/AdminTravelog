@@ -95,10 +95,10 @@ const DestinationFormModal: React.FC<DestinationFormModalProps> = ({
                     required
                 >
                     {/* Nếu có ảnh thì hiển thị */}
-                    {form.getFieldValue("imageUrl") ? (
+                    {form.getFieldValue("coverImage") ? (
                         <div style={{ marginBottom: 12 }}>
                             <Image
-                                src={form.getFieldValue("imageUrl")}
+                                src={form.getFieldValue("coverImage")}
                                 width={200}
                                 style={{ borderRadius: 8 }}
                             />
@@ -106,7 +106,7 @@ const DestinationFormModal: React.FC<DestinationFormModalProps> = ({
                                 danger
                                 icon={<DeleteOutlined />}
                                 style={{ marginTop: 8 }}
-                                onClick={() => form.setFieldsValue({ imageUrl: "" })}
+                                onClick={() => form.setFieldsValue({ coverImage: "" })}
                             >
                                 Remove Image
                             </Button>
@@ -120,7 +120,7 @@ const DestinationFormModal: React.FC<DestinationFormModalProps> = ({
                         customRequest={async ({ file, onSuccess }) => {
                             const url = await uploadToCloudinary(file as File);
                             if (url) {
-                                form.setFieldsValue({ imageUrl: url });
+                                form.setFieldsValue({ coverImage: url });
                                 onSuccess && onSuccess("ok");
                             }
                         }}

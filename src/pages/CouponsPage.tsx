@@ -94,30 +94,35 @@ const CouponsPage: React.FC = () => {
             render: (text) => <Tag color="blue">{text}</Tag>
         },
         {
+            title: 'Title',
+            dataIndex: 'title',
+            key: 'title',
+        },
+        {
             title: 'Discount',
             key: 'discount',
             render: (_, record) => (
                 <span>
-                    {record.discountType === 'percentage' ? `${record.discountValue}%` : `$${record.discountValue}`}
+                    {record.type === 'percentage' ? `${record.cost}%` : `$${record.cost}`}
                 </span>
             )
         },
         {
             title: 'Min Order',
-            dataIndex: 'minOrderValue',
-            key: 'minOrderValue',
+            dataIndex: 'minimumOrderValue',
+            key: 'minimumOrderValue',
             render: (val) => val ? `$${val.toLocaleString()}` : '-',
         },
         {
             title: 'Valid Until',
-            dataIndex: 'validUntil',
-            key: 'validUntil',
+            dataIndex: 'timeEnd',
+            key: 'timeEnd',
             render: (val) => val ? dayjs(val.toDate()).format('DD MMM YYYY') : '-',
         },
         {
             title: 'Usage',
             key: 'usage',
-            render: (_, record) => `${record.usedCount || 0} / ${record.usageLimit}`,
+            render: (_, record) => `${record.usedCount || 0} / ${record.usageLimit || '∞'}`,
         },
     ];
 

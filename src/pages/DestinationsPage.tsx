@@ -87,25 +87,29 @@ const DestinationsPage: React.FC = () => {
 
     const columns: ColumnsType<Destination> = [
         {
-            title: 'Name',
+            title: 'Destination',
             dataIndex: 'name',
             key: 'name',
             render: (text, record) => (
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     <img
-                        src={record.imageUrl}
+                        src={record.coverImage}
                         alt={text}
-                        style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: 4 }}
-                        onError={(e) => (e.currentTarget.src = 'https://via.placeholder.com/40')}
+                        style={{ width: 50, height: 50, objectFit: 'cover', borderRadius: 4 }}
+                        onError={(e) => (e.currentTarget.src = 'https://via.placeholder.com/50')}
                     />
-                    <span>{text}</span>
+                    <div>
+                        <div style={{ fontWeight: 500 }}>{text}</div>
+                        <div style={{ fontSize: 12, color: '#888' }}>{record.country}</div>
+                    </div>
                 </div>
             )
         },
         {
-            title: 'Country',
-            dataIndex: 'country',
-            key: 'country',
+            title: 'Description',
+            dataIndex: 'description',
+            key: 'description',
+            ellipsis: true,
         },
     ];
 

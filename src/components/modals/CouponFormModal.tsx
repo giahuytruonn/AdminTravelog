@@ -24,8 +24,8 @@ const CouponFormModal: React.FC<CouponFormModalProps> = ({
         if (visible && initialValues) {
             form.setFieldsValue({
                 ...initialValues,
-                validFrom: initialValues.validFrom ? dayjs(initialValues.validFrom.toDate()) : null,
-                validUntil: initialValues.validUntil ? dayjs(initialValues.validUntil.toDate()) : null,
+                timeStart: initialValues.timeStart ? dayjs(initialValues.timeStart.toDate()) : null,
+                timeEnd: initialValues.timeEnd ? dayjs(initialValues.timeEnd.toDate()) : null,
             });
         } else {
             form.resetFields();
@@ -34,18 +34,10 @@ const CouponFormModal: React.FC<CouponFormModalProps> = ({
 
     const handleOk = () => {
         form.validateFields().then((values) => {
-            // Convert dayjs back to Date or Timestamp if needed by service
-            // Service expects standard JS Date or Firestore Timestamp?
-            // The service uses addDoc which handles Date objects, but our type says Timestamp.
-            // Let's pass Date objects and let the service/firebase handle conversion or we convert here.
-            // For simplicity, let's pass the values and let the service handle it or assume service takes Date.
-            // Actually, our type definition says Timestamp. 
-            // But when creating, we usually pass Date objects and Firebase converts them.
-            // Let's just pass the values as is, but we might need to convert dayjs to Date.
             const formattedValues = {
                 ...values,
-                validFrom: values.validFrom ? values.validFrom.toDate() : null,
-                validUntil: values.validUntil ? values.validUntil.toDate() : null,
+                timeStart: values.timeStart ? values.timeStart.toDate() : null,
+                timeEnd: values.timeEnd ? values.timeEnd.toDate() : null,
             };
             onSubmit(formattedValues);
         });
@@ -63,8 +55,16 @@ const CouponFormModal: React.FC<CouponFormModalProps> = ({
             <Form
                 form={form}
                 layout="vertical"
-                initialValues={{ status: true, discountType: 'percentage' }}
+                initialValues={{ status: true, type: 'percentage' }}
             >
+                <Form.Item
+                    name="title"
+                    label="Title"
+                    rules={[{ required: true, message: 'Please enter title' }]}
+                >
+                    <Input placeholder="e.g. Summer Sale" />
+                </Form.Item>
+
                 <Form.Item
                     name="code"
                     label="Coupon Code"
@@ -75,7 +75,7 @@ const CouponFormModal: React.FC<CouponFormModalProps> = ({
 
                 <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
                     <Form.Item
-                        name="discountType"
+                        name="type"
                         label="Type"
                         rules={[{ required: true, message: 'Required' }]}
                     >
@@ -85,7 +85,7 @@ const CouponFormModal: React.FC<CouponFormModalProps> = ({
                         </Select>
                     </Form.Item>
                     <Form.Item
-                        name="discountValue"
+                        name="cost"
                         label="Value"
                         rules={[{ required: true, message: 'Required' }]}
                         style={{ flex: 1 }}
@@ -96,7 +96,7 @@ const CouponFormModal: React.FC<CouponFormModalProps> = ({
 
                 <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
                     <Form.Item
-                        name="minOrderValue"
+                        name="minimumOrderValue"
                         label="Min Order Value"
                         rules={[{ required: true, message: 'Required' }]}
                         style={{ flex: 1 }}
@@ -108,7 +108,7 @@ const CouponFormModal: React.FC<CouponFormModalProps> = ({
                         />
                     </Form.Item>
                     <Form.Item
-                        name="maxDiscount"
+                        name="maximumDiscount"
                         label="Max Discount"
                         style={{ flex: 1 }}
                     >
@@ -116,36 +116,29 @@ const CouponFormModal: React.FC<CouponFormModalProps> = ({
                             formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                             parser={value => value!.replace(/\$\s?|(,*)/g, '')}
                             style={{ width: '100%' }}
+                            placeholder="Unlimited"
                         />
                     </Form.Item>
                 </div>
 
                 <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
                     <Form.Item
-                        name="validFrom"
-                        label="Valid From"
+                        name="timeStart"
+                        label="Start Time"
                         rules={[{ required: true, message: 'Required' }]}
                         style={{ flex: 1 }}
                     >
                         <DatePicker showTime style={{ width: '100%' }} />
                     </Form.Item>
                     <Form.Item
-                        name="validUntil"
-                        label="Valid Until"
+                        name="timeEnd"
+                        label="End Time"
                         rules={[{ required: true, message: 'Required' }]}
                         style={{ flex: 1 }}
                     >
                         <DatePicker showTime style={{ width: '100%' }} />
                     </Form.Item>
                 </div>
-
-                <Form.Item
-                    name="usageLimit"
-                    label="Usage Limit"
-                    rules={[{ required: true, message: 'Required' }]}
-                >
-                    <InputNumber min={1} style={{ width: '100%' }} />
-                </Form.Item>
 
                 <Form.Item
                     name="description"
