@@ -5,7 +5,6 @@ import { couponsService } from '../services/couponsService';
 import { destinationsService } from '../services/destinationsService';
 import type { Tour } from '../types';
 import DashboardStats from '../components/dashboard/DashboardStats';
-import RevenueChart from '../components/dashboard/RevenueChart';
 import RecentActivity from '../components/dashboard/RecentActivity';
 
 const { Title, Text } = Typography;
@@ -16,7 +15,6 @@ const Dashboard: React.FC = () => {
         tours: 0,
         coupons: 0,
         destinations: 0,
-        users: 1250 // Mock data
     });
     const [recentTours, setRecentTours] = useState<Tour[]>([]);
 
@@ -33,7 +31,6 @@ const Dashboard: React.FC = () => {
                     tours: tours.filter(t => t.status).length,
                     coupons: coupons.filter(c => c.status).length,
                     destinations: destinations.filter(d => d.status).length,
-                    users: 1250
                 });
 
                 setRecentTours(tours.slice(0, 5));
@@ -65,10 +62,7 @@ const Dashboard: React.FC = () => {
             <DashboardStats stats={stats} />
 
             <Row gutter={[24, 24]} style={{ marginTop: 24 }}>
-                <Col xs={24} lg={16}>
-                    <RevenueChart />
-                </Col>
-                <Col xs={24} lg={8}>
+                <Col xs={24} lg={24}>
                     <RecentActivity tours={recentTours} />
                 </Col>
             </Row>

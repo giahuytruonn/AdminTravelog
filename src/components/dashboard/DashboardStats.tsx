@@ -4,7 +4,6 @@ import {
     GlobalOutlined,
     TagsOutlined,
     EnvironmentOutlined,
-    UserOutlined,
     ArrowUpOutlined,
     ArrowDownOutlined
 } from '@ant-design/icons';
@@ -14,7 +13,6 @@ interface DashboardStatsProps {
         tours: number;
         coupons: number;
         destinations: number;
-        users: number; // Mocking users for now
     };
 }
 
@@ -59,7 +57,7 @@ const StatCard = ({ title, value, prefix, color, trend }: any) => (
 const DashboardStats: React.FC<DashboardStatsProps> = ({ stats }) => {
     return (
         <Row gutter={[24, 24]}>
-            <Col xs={24} sm={12} lg={6}>
+            <Col xs={24} sm={12} lg={8}>
                 <StatCard
                     title="Total Tours"
                     value={stats.tours}
@@ -68,7 +66,7 @@ const DashboardStats: React.FC<DashboardStatsProps> = ({ stats }) => {
                     trend={12}
                 />
             </Col>
-            <Col xs={24} sm={12} lg={6}>
+            <Col xs={24} sm={12} lg={8}>
                 <StatCard
                     title="Active Coupons"
                     value={stats.coupons}
@@ -77,22 +75,13 @@ const DashboardStats: React.FC<DashboardStatsProps> = ({ stats }) => {
                     trend={-5}
                 />
             </Col>
-            <Col xs={24} sm={12} lg={6}>
+            <Col xs={24} sm={12} lg={8}>
                 <StatCard
                     title="Destinations"
                     value={stats.destinations}
                     prefix={<EnvironmentOutlined />}
                     color="#fa8c16"
                     trend={8}
-                />
-            </Col>
-            <Col xs={24} sm={12} lg={6}>
-                <StatCard
-                    title="Total Users"
-                    value={stats.users}
-                    prefix={<UserOutlined />}
-                    color="#52c41a"
-                    trend={24}
                 />
             </Col>
         </Row>
