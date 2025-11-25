@@ -1,11 +1,11 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { Spin, Result, Button } from 'antd';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../auth/useAuth';
 import { signOut } from 'firebase/auth';
 import { auth } from '../firebase/firebase';
 
-export const AuthGuard = ({ children }: { children: JSX.Element }) => {
+export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
     const { user, userProfile, loading } = useAuth();
 
     if (loading) {

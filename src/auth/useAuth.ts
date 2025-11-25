@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { onAuthStateChanged, User } from 'firebase/auth';
+import { onAuthStateChanged, type User } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase/firebase';
 import type { User as UserType } from '../types'; // Import cái interface User mới mình đã sửa ở bài trước
