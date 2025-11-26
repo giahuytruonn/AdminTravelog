@@ -91,7 +91,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, onCollapse }) => {
     >
       <div
         style={{
-          height: 64,
+          height: 80,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -100,10 +100,15 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, onCollapse }) => {
       >
         <h2
           style={{
-            color: "#0770e4",
+            background: 'linear-gradient(135deg, #0061ff 0%, #60efff 100%)',
+            backgroundClip: 'text',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
             margin: 0,
             fontSize: collapsed ? "18px" : "24px",
             fontWeight: "bold",
+            fontFamily: "'Outfit', sans-serif",
+            color: 'transparent' // Fallback
           }}
         >
           {collapsed ? "AT" : "Admin Travelog"}
@@ -114,7 +119,18 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, onCollapse }) => {
         theme="light"
         mode="inline"
         selectedKeys={[location.pathname]}
-        items={[...items, logoutItem]} // Thêm nút logout vào cuối
+        items={[...items, logoutItem].map(item => ({
+          ...item,
+          style: location.pathname === item.key ? {
+            background: 'linear-gradient(135deg, #0061ff 0%, #60efff 100%)',
+            color: '#fff',
+            borderRadius: 8,
+            marginBottom: 4
+          } : {
+            borderRadius: 8,
+            marginBottom: 4
+          }
+        }))}
         onClick={({ key }) => {
           if (key === "logout") {
             signOut(auth);
@@ -123,7 +139,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, onCollapse }) => {
             navigate(key);
           }
         }}
-        style={{ borderRight: 0 }}
+        style={{ borderRight: 0, padding: '16px' }}
       />
     </Sider>
   );
