@@ -94,7 +94,7 @@ const UserManagementContent: React.FC = () => {
         // Thêm nút xem chi tiết cho Customer (nếu muốn)
         {
             title: 'Hành động', key: 'action',
-            render: (_, record: User) => (
+            render: (_:any, record: User) => (
                 <Button icon={<EyeOutlined />} size="small" onClick={() => showUserDetail(record)}>Chi tiết</Button>
             )
         }
@@ -107,7 +107,7 @@ const UserManagementContent: React.FC = () => {
         { title: 'Quy trình', dataIndex: 'status', key: 'status', render: (s: string) => <Tag color={s==='active'?'green':s==='payment_pending'?'blue':'orange'}>{s}</Tag> },
         {
             title: 'Hành động', key: 'action',
-            render: (_, record: User) => (
+            render: (_:any, record: User) => (
                 <Space>
                     {/* --- NÚT XEM CHI TIẾT --- */}
                     <Tooltip title="Xem toàn bộ hồ sơ">

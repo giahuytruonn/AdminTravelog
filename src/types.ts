@@ -79,6 +79,8 @@ export interface User extends Omit<BaseEntity, 'status'> {
     // Dữ liệu riêng cho Partner (Optional)
     agencyName?: string;
     reason?: string;
+    // Mã đơn thanh toán nếu hệ thống tạo link thanh toán bên thứ 3 (PayOS)
+    payosOrderCode?: string;
 
     // Dữ liệu riêng cho Customer (Optional - lấy từ mẫu cũ của bạn)
     rank?: 'Bronze' | 'Silver' | 'Gold' | 'Platinum';
