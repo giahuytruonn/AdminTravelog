@@ -154,7 +154,7 @@ exports.onPartnerStatusChange = functions.firestore
           subject,
           msg,
           "TRUY CẬP DASHBOARD",
-          "https://admin-management-travelog.vercel.app"
+          "https://admin-management-travelog-n25by2s2w-giahuytruonns-projects.vercel.app"
         );
       }
       // TRƯỜNG HỢP 3: TỪ CHỐI
