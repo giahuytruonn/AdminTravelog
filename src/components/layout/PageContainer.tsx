@@ -1,4 +1,4 @@
-import React, { ReactNode, CSSProperties } from 'react';
+import React, { type ReactNode, type CSSProperties } from 'react';
 import { Typography } from 'antd';
 
 const { Title, Paragraph } = Typography;
