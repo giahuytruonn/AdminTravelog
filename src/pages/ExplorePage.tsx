@@ -8,6 +8,8 @@ import { exploreService } from "../services/exploreService";
 import type { ExploreVideo } from "../types";
 import PageContainer from "../components/layout/PageContainer";
 
+type ExploreFormValues = Record<string, unknown>;
+
 const ExplorePage: React.FC = () => {
   const [data, setData] = useState<ExploreVideo[]>([]);
   const [loading, setLoading] = useState(false);
@@ -42,34 +44,33 @@ const ExplorePage: React.FC = () => {
     setModalVisible(true);
   };
 
-  const handleDelete = async (id: string) => {
+  const handleStatusChange = async (id: string, status: boolean) => {
     try {
-      await exploreService.softDelete(id);
-      message.success("Video deleted successfully");
+      await exploreService.setStatus(id, status);
+      message.success(status ? "Video activated" : "Video set to inactive");
       fetchData();
     } catch (error) {
-      message.error("Failed to delete video");
+      console.error(error);
+      message.error("Failed to update video status");
     }
   };
 
-  const handleRestore = async (id: string) => {
-    try {
-      await exploreService.restore(id);
-      message.success("Video restored successfully");
-      fetchData();
-    } catch (error) {
-      message.error("Failed to restore video");
-    }
-  };
-
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async (values: ExploreFormValues) => {
     setLoading(true);
     try {
       if (editingItem) {
-        await exploreService.update(editingItem.id, values);
+        await exploreService.update(
+          editingItem.id,
+          values as Partial<ExploreVideo>
+        );
         message.success("Video updated successfully");
       } else {
-        await exploreService.create(values);
+        await exploreService.create(
+          values as Omit<
+            ExploreVideo,
+            "id" | "createdAt" | "updatedAt" | "status" | "likes"
+          >
+        );
         message.success("Video created successfully");
       }
       setModalVisible(false);
@@ -190,8 +191,7 @@ const ExplorePage: React.FC = () => {
         entityName="Explore Video"
         onAdd={handleAdd}
         onEdit={handleEdit}
-        onDelete={handleDelete}
-        onRestore={handleRestore}
+        onStatusChange={handleStatusChange}
         onSearch={setSearchText}
         onRefresh={fetchData}
         title="Thư viện video cảm hứng"

@@ -4,8 +4,6 @@ import {
     updateDoc,
     doc,
     getDocs,
-    query,
-    where,
     serverTimestamp
 } from 'firebase/firestore';
 import { db } from '../firebase/firebase';
@@ -15,8 +13,7 @@ const COLLECTION_NAME = 'destinations';
 
 export const destinationsService = {
     getAll: async (): Promise<Destination[]> => {
-        const q = query(collection(db, COLLECTION_NAME));
-        const snapshot = await getDocs(q);
+        const snapshot = await getDocs(collection(db, COLLECTION_NAME));
         return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Destination));
     },
 
@@ -38,18 +35,10 @@ export const destinationsService = {
         });
     },
 
-    softDelete: async (id: string): Promise<void> => {
+    setStatus: async (id: string, status: boolean): Promise<void> => {
         const docRef = doc(db, COLLECTION_NAME, id);
         await updateDoc(docRef, {
-            status: false,
-            updatedAt: serverTimestamp()
-        });
-    },
-
-    restore: async (id: string): Promise<void> => {
-        const docRef = doc(db, COLLECTION_NAME, id);
-        await updateDoc(docRef, {
-            status: true,
+            status,
             updatedAt: serverTimestamp()
         });
     }

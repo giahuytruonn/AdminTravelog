@@ -4,8 +4,6 @@ import {
     updateDoc,
     doc,
     getDocs,
-    query,
-    where,
     serverTimestamp
 } from 'firebase/firestore';
 import { db } from '../firebase/firebase';
@@ -14,10 +12,9 @@ import type { ExploreVideo } from '../types';
 const COLLECTION_NAME = 'explores';
 
 export const exploreService = {
-    // Lấy tất cả video (Active)
+    // Lấy tất cả video
     getAll: async (): Promise<ExploreVideo[]> => {
-        const q = query(collection(db, COLLECTION_NAME), where('status', '==', true));
-        const snapshot = await getDocs(q);
+        const snapshot = await getDocs(collection(db, COLLECTION_NAME));
         return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as ExploreVideo));
     },
 
@@ -42,20 +39,11 @@ export const exploreService = {
         });
     },
 
-    // Xóa mềm (Soft Delete)
-    softDelete: async (id: string): Promise<void> => {
+    // Cập nhật trạng thái
+    setStatus: async (id: string, status: boolean): Promise<void> => {
         const docRef = doc(db, COLLECTION_NAME, id);
         await updateDoc(docRef, {
-            status: false,
-            updatedAt: serverTimestamp()
-        });
-    },
-
-    // Khôi phục
-    restore: async (id: string): Promise<void> => {
-        const docRef = doc(db, COLLECTION_NAME, id);
-        await updateDoc(docRef, {
-            status: true,
+            status,
             updatedAt: serverTimestamp()
         });
     }

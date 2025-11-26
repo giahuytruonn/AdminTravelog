@@ -8,6 +8,8 @@ import type { Coupon } from "../types";
 import dayjs from "dayjs";
 import PageContainer from "../components/layout/PageContainer";
 
+type CouponFormValues = Record<string, unknown>;
+
 const CouponsPage: React.FC = () => {
   const [data, setData] = useState<Coupon[]>([]);
   const [loading, setLoading] = useState(false);
@@ -42,34 +44,27 @@ const CouponsPage: React.FC = () => {
     setModalVisible(true);
   };
 
-  const handleDelete = async (id: string) => {
+  const handleStatusChange = async (id: string, status: boolean) => {
     try {
-      await couponsService.softDelete(id);
-      message.success("Coupon deleted successfully");
+      await couponsService.setStatus(id, status);
+      message.success(status ? "Coupon activated" : "Coupon set to inactive");
       fetchData();
     } catch (error) {
-      message.error("Failed to delete coupon");
+      console.error(error);
+      message.error("Failed to update coupon status");
     }
   };
 
-  const handleRestore = async (id: string) => {
-    try {
-      await couponsService.restore(id);
-      message.success("Coupon restored successfully");
-      fetchData();
-    } catch (error) {
-      message.error("Failed to restore coupon");
-    }
-  };
-
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async (values: CouponFormValues) => {
     setLoading(true);
     try {
       if (editingItem) {
-        await couponsService.update(editingItem.id, values);
+        await couponsService.update(editingItem.id, values as Partial<Coupon>);
         message.success("Coupon updated successfully");
       } else {
-        await couponsService.create(values);
+        await couponsService.create(
+          values as Omit<Coupon, "id" | "createdAt" | "updatedAt" | "status">
+        );
         message.success("Coupon created successfully");
       }
       setModalVisible(false);
@@ -143,8 +138,7 @@ const CouponsPage: React.FC = () => {
         entityName="Coupon"
         onAdd={handleAdd}
         onEdit={handleEdit}
-        onDelete={handleDelete}
-        onRestore={handleRestore}
+        onStatusChange={handleStatusChange}
         onSearch={setSearchText}
         onRefresh={fetchData}
         title="Danh sách mã đang hoạt động"

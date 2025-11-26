@@ -7,6 +7,8 @@ import { destinationsService } from "../services/destinationsService";
 import type { Destination } from "../types";
 import PageContainer from "../components/layout/PageContainer";
 
+type DestinationFormValues = Record<string, unknown>;
+
 const DestinationsPage: React.FC = () => {
   const [data, setData] = useState<Destination[]>([]);
   const [loading, setLoading] = useState(false);
@@ -41,34 +43,35 @@ const DestinationsPage: React.FC = () => {
     setModalVisible(true);
   };
 
-  const handleDelete = async (id: string) => {
+  const handleStatusChange = async (id: string, status: boolean) => {
     try {
-      await destinationsService.softDelete(id);
-      message.success("Destination deleted successfully");
+      await destinationsService.setStatus(id, status);
+      message.success(
+        status ? "Destination activated" : "Destination set to inactive"
+      );
       fetchData();
     } catch (error) {
-      message.error("Failed to delete destination");
+      console.error(error);
+      message.error("Failed to update destination status");
     }
   };
 
-  const handleRestore = async (id: string) => {
-    try {
-      await destinationsService.restore(id);
-      message.success("Destination restored successfully");
-      fetchData();
-    } catch (error) {
-      message.error("Failed to restore destination");
-    }
-  };
-
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async (values: DestinationFormValues) => {
     setLoading(true);
     try {
       if (editingItem) {
-        await destinationsService.update(editingItem.id, values);
+        await destinationsService.update(
+          editingItem.id,
+          values as Partial<Destination>
+        );
         message.success("Destination updated successfully");
       } else {
-        await destinationsService.create(values);
+        await destinationsService.create(
+          values as Omit<
+            Destination,
+            "id" | "createdAt" | "updatedAt" | "status"
+          >
+        );
         message.success("Destination created successfully");
       }
       setModalVisible(false);
@@ -136,8 +139,7 @@ const DestinationsPage: React.FC = () => {
         entityName="Destination"
         onAdd={handleAdd}
         onEdit={handleEdit}
-        onDelete={handleDelete}
-        onRestore={handleRestore}
+        onStatusChange={handleStatusChange}
         onSearch={setSearchText}
         onRefresh={fetchData}
         title="Danh sách điểm đến"

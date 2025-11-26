@@ -7,6 +7,8 @@ import { toursService } from "../services/toursService";
 import type { Tour } from "../types";
 import PageContainer from "../components/layout/PageContainer";
 
+type TourFormValues = Record<string, unknown>;
+
 const ToursPage: React.FC = () => {
   const [data, setData] = useState<Tour[]>([]);
   const [loading, setLoading] = useState(false);
@@ -41,34 +43,27 @@ const ToursPage: React.FC = () => {
     setModalVisible(true);
   };
 
-  const handleDelete = async (id: string) => {
+  const handleStatusChange = async (id: string, status: boolean) => {
     try {
-      await toursService.softDelete(id);
-      message.success("Tour deleted successfully");
+      await toursService.setStatus(id, status);
+      message.success(status ? "Tour activated" : "Tour set to inactive");
       fetchData();
     } catch (error) {
-      message.error("Failed to delete tour");
+      console.error(error);
+      message.error("Failed to update tour status");
     }
   };
 
-  const handleRestore = async (id: string) => {
-    try {
-      await toursService.restore(id);
-      message.success("Tour restored successfully");
-      fetchData();
-    } catch (error) {
-      message.error("Failed to restore tour");
-    }
-  };
-
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async (values: TourFormValues) => {
     setLoading(true);
     try {
       if (editingItem) {
-        await toursService.update(editingItem.id, values);
+        await toursService.update(editingItem.id, values as Partial<Tour>);
         message.success("Tour updated successfully");
       } else {
-        await toursService.create(values);
+        await toursService.create(
+          values as Omit<Tour, "id" | "createdAt" | "updatedAt" | "status">
+        );
         message.success("Tour created successfully");
       }
       setModalVisible(false);
@@ -158,8 +153,7 @@ const ToursPage: React.FC = () => {
         entityName="Tour"
         onAdd={handleAdd}
         onEdit={handleEdit}
-        onDelete={handleDelete}
-        onRestore={handleRestore}
+        onStatusChange={handleStatusChange}
         onSearch={setSearchText}
         onRefresh={fetchData}
         title="Danh sách tour đang hiển thị"

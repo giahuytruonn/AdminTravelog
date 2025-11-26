@@ -1,10 +1,8 @@
-import { Table, Input, Button, Space, Tag, Popconfirm, Tooltip } from 'antd';
+import { Table, Input, Button, Space, Tag, Tooltip, Switch } from 'antd';
 import {
     PlusOutlined,
     SearchOutlined,
     EditOutlined,
-    DeleteOutlined,
-    UndoOutlined,
     ReloadOutlined
 } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
@@ -17,8 +15,7 @@ interface EntityTableProps<T extends BaseEntity> {
     entityName: string;
     onAdd: () => void;
     onEdit: (record: T) => void;
-    onDelete: (id: string) => void;
-    onRestore: (id: string) => void;
+    onStatusChange: (id: string, nextStatus: boolean) => void;
     onSearch: (value: string) => void;
     onRefresh?: () => void;
 }
@@ -30,8 +27,7 @@ function EntityTable<T extends BaseEntity>({
     entityName,
     onAdd,
     onEdit,
-    onDelete,
-    onRestore,
+    onStatusChange,
     onSearch,
     onRefresh,
     title // New prop
@@ -40,7 +36,7 @@ function EntityTable<T extends BaseEntity>({
     const actionColumn: ColumnsType<T>[0] = {
         title: 'Actions',
         key: 'actions',
-        width: 150,
+        width: 180,
         render: (_, record) => (
             <Space>
                 <Tooltip title="Edit">
@@ -51,35 +47,14 @@ function EntityTable<T extends BaseEntity>({
                         style={{ borderRadius: 6, border: 'none', background: '#f0f5ff', color: '#2f54eb' }}
                     />
                 </Tooltip>
-                {record.status ? (
-                    <Popconfirm
-                        title={`Delete ${entityName}?`}
-                        description="This will soft-delete the record."
-                        onConfirm={() => onDelete(record.id)}
-                        okText="Yes"
-                        cancelText="No"
-                    >
-                        <Tooltip title="Delete">
-                            <Button
-                                danger
-                                icon={<DeleteOutlined />}
-                                size="small"
-                                style={{ borderRadius: 6, border: 'none', background: '#fff1f0', color: '#f5222d' }}
-                            />
-                        </Tooltip>
-                    </Popconfirm>
-                ) : (
-                    <Tooltip title="Restore">
-                        <Button
-                            type="primary"
-                            ghost
-                            icon={<UndoOutlined />}
-                            size="small"
-                            onClick={() => onRestore(record.id)}
-                            style={{ borderRadius: 6 }}
-                        />
-                    </Tooltip>
-                )}
+                <Tooltip title={record.status ? 'Chuyển sang Inactive' : 'Kích hoạt'}>
+                    <Switch
+                        checked={Boolean(record.status)}
+                        onChange={(checked) => onStatusChange(record.id, checked)}
+                        checkedChildren="Active"
+                        unCheckedChildren="Inactive"
+                    />
+                </Tooltip>
             </Space>
         ),
     };
