@@ -57,3 +57,32 @@ export interface ExploreVideo {
   createdAt: any;
   updatedAt?: any;
 }
+
+export type UserRole = 'CUSTOMER' | 'ADMIN' | 'PARTNER';
+
+// Status quy trình duyệt của Partner
+export type PartnerStatus = 'pending_review' | 'payment_pending' | 'active' | 'rejected';
+
+// Interface User kế thừa BaseEntity nhưng ghi đè lại status
+export interface User extends Omit<BaseEntity, 'status'> {
+    email: string;
+    displayName: string;
+    phoneNumber: string;
+    photoURL?: string;
+    userType: UserRole;
+
+    // Status đa hình: 
+    // - Customer/Admin: true (active), false (banned)
+    // - Partner: PartnerStatus (chuỗi quy trình)
+    status: boolean | PartnerStatus;
+
+    // Dữ liệu riêng cho Partner (Optional)
+    agencyName?: string;
+    reason?: string;
+
+    // Dữ liệu riêng cho Customer (Optional - lấy từ mẫu cũ của bạn)
+    rank?: 'Bronze' | 'Silver' | 'Gold' | 'Platinum';
+    pointReward?: number;
+    coupons?: string[];
+    savedTours?: string[];
+}

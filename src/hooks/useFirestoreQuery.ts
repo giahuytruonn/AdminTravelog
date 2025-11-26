@@ -15,7 +15,7 @@ interface UseFirestoreQueryResult<T> {
     refetch: () => void;
 }
 
-export function useFirestoreQuery<T extends BaseEntity>(
+export function useFirestoreQuery<T extends {id : string}>(
     collectionName: string,
     constraints: QueryConstraint[] = []
 ): UseFirestoreQueryResult<T> {
